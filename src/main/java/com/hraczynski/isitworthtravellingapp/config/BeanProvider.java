@@ -1,5 +1,7 @@
 package com.hraczynski.isitworthtravellingapp.config;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -15,8 +17,10 @@ public class BeanProvider {
 
     @Bean
     public RestTemplate getRestTemplate() {
-        ClientHttpRequestFactory requestFactory = new
-                HttpComponentsClientHttpRequestFactory();
+        HttpClient httpClient = HttpClientBuilder.create()
+                .disableCookieManagement()
+                .build();
+        ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new JavaScriptMessageConverter());
         restTemplate.setRequestFactory(requestFactory);

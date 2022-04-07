@@ -1,9 +1,9 @@
 package com.hraczynski.isitworthtravellingapp.service;
 
-import com.hraczynski.isitworthtravellingapp.client.simplifiedresponseobject.SimpleWeather;
+import com.hraczynski.isitworthtravellingapp.client.simplifiedresponseobject.SimpleWeatherDailyItem;
+
+import java.util.List;
 
 public interface WeatherService {
-    SimpleWeather getWeatherByName(String cityName);
-
-    SimpleWeather getWeatherByCoords(double lat, double lon);
+    List<SimpleWeatherDailyItem> getWeatherByCoords(double lat, double lon);
 }

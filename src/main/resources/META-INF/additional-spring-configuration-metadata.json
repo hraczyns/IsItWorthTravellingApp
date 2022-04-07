@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "openweathermap-apikey",
+      "type": "java.lang.String",
+      "description": "Description for openweathermap-apikey."
+    },
+    {
+      "name": "opentripmap-apikey",
+      "type": "java.lang.String",
+      "description": "Description for opentripmap-apikey."
+    }
+  ] }

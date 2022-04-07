@@ -4,10 +4,12 @@ import com.hraczynski.isitworthtravellingapp.client.api.WebResultApiClient;
 import com.hraczynski.isitworthtravellingapp.client.pojos.webresult.RelatedTopicsItem;
 import com.hraczynski.isitworthtravellingapp.client.pojos.webresult.WebResponse;
 import com.hraczynski.isitworthtravellingapp.client.simplifiedresponseobject.SimpleWebResult;
-import com.hraczynski.isitworthtravellingapp.exceptions.EmptyWebResultException;
+import com.hraczynski.isitworthtravellingapp.exceptions.LackOfInfoException;
 import com.hraczynski.isitworthtravellingapp.service.WebResultService;
-import com.hraczynski.isitworthtravellingapp.utils.ApiConsts;
+import com.hraczynski.isitworthtravellingapp.utils.ApiConstants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +17,25 @@ import java.util.function.Predicate;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SimpleWebResultService implements WebResultService {
     private final WebResultApiClient webResultApiClient;
 
     @Override
-    public SimpleWebResult getWebResultAboutCity(String cityName) {
+    public SimpleWebResult getWebResultAboutCity(String cityName, String countryCode) {
+        log.info("Searching for web results about city = {} in country = {}", cityName, countryCode);
         ResponseEntity<WebResponse> webResponse = webResultApiClient.getWebResponse(cityName);
-        if (webResponse == null || webResponse.getBody() == null) {
-            throw new EmptyWebResultException();
+        if (webResponse == null || webResponse.getBody() == null || webResponse.getStatusCode() != HttpStatus.OK) {
+            log.error("No results found");
+            throw new LackOfInfoException("The response doesn't contain web search information");
         }
         String shortDescription = webResponse.getBody().getAbstract();
         String url = extractAndBuildUrl(webResponse.getBody());
 
-        if (shortDescription == null || "".equals(shortDescription) || ApiConsts.WEB_RESULT_BASE_URL.equals(url)) {
+        if (shortDescription == null || "".equals(shortDescription) || ApiConstants.WEB_RESULT_BASE_URL.equals(url)) {
             ResponseEntity<WebResponse> webResponseAlt = webResultApiClient.getAlternativeWebResponse(cityName);
-            if (webResponseAlt == null || webResponseAlt.getBody() == null) {
-                throw new EmptyWebResultException();
+            if (webResponseAlt == null || webResponseAlt.getBody() == null || webResponse.getStatusCode() != HttpStatus.OK) {
+                throw new LackOfInfoException("The response doesn't contain web search information");
             }
             return buildFromRelatedTopics(webResponseAlt.getBody());
         }
@@ -49,7 +54,7 @@ public class SimpleWebResultService implements WebResultService {
                     }
                     return new SimpleWebResult()
                             .setShortDescription(s.getText())
-                            .setUrl(ApiConsts.WEB_RESULT_BASE_URL + s.getIcon().getURL());
+                            .setUrl(ApiConstants.WEB_RESULT_BASE_URL + s.getIcon().getURL());
                 })
                 .findFirst()
                 .orElseGet(SimpleWebResult::new);
@@ -68,7 +73,7 @@ public class SimpleWebResultService implements WebResultService {
     }
 
     private String extractAndBuildUrl(WebResponse body) {
-        return ApiConsts.WEB_RESULT_BASE_URL + body.getImage();
+        return ApiConstants.WEB_RESULT_BASE_URL + body.getImage();
     }
 
 }

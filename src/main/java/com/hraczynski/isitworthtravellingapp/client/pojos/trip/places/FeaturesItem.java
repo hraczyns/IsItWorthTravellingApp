@@ -1,4 +1,4 @@
-package com.hraczynski.isitworthtravellingapp.client.pojos.trip;
+package com.hraczynski.isitworthtravellingapp.client.pojos.trip.places;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

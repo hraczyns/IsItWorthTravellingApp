@@ -1,7 +1,7 @@
 package com.hraczynski.isitworthtravellingapp.client.api;
 
-import com.hraczynski.isitworthtravellingapp.client.pojos.trip.TripResponse;
-import com.hraczynski.isitworthtravellingapp.utils.ApiConsts;
+import com.hraczynski.isitworthtravellingapp.client.pojos.trip.places.TripResponse;
+import com.hraczynski.isitworthtravellingapp.utils.ApiConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class TripApiClient {
-    private static final int DEFAULT_LIMIT = 10;
+    private static final int DEFAULT_LIMIT = 9;
     private static final String DEFAULT_KIND = "interesting_places";
     @Value("${opentripmap-apikey}")
     private String apiKey;
@@ -28,12 +28,12 @@ public class TripApiClient {
     }
 
     private String prepareUrl(double lon, double lat, int limit, String kinds) {
-        return ApiConsts.TRIP_BASE_URL +
+        return ApiConstants.TRIP_BASE_URL +
                 "?lon_min=" + (lon - 0.1) +
                 "&lon_max=" + (lon + 0.1) +
                 "&lat_min=" + (lat - 0.1) +
                 "&lat_max=" + (lat + 0.1) +
-                "&limit=" + (limit != 0 && limit <= 3 ? limit : DEFAULT_LIMIT) +
+                "&limit=" + (Math.min(limit, DEFAULT_LIMIT))+
                 "&kinds=" + (kinds != null ? kinds : DEFAULT_KIND) +
                 "&apikey=" + apiKey;
     }

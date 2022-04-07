@@ -1,7 +1,7 @@
 package com.hraczynski.isitworthtravellingapp.client.api;
 
 import com.hraczynski.isitworthtravellingapp.client.pojos.webresult.WebResponse;
-import com.hraczynski.isitworthtravellingapp.utils.ApiConsts;
+import com.hraczynski.isitworthtravellingapp.utils.ApiConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class WebResultApiClient {
     }
 
     private String prepareUrl(String cityName, boolean skipDisambig) {
-        return ApiConsts.WEB_RESULT_BASE_URL + "?q=" + cityName + "&format=json&skip_disambig="
+        return ApiConstants.WEB_RESULT_BASE_URL + "?q=" + cityName + "&format=json&skip_disambig="
                 + (skipDisambig ? "1" : "0");
     }
 }
