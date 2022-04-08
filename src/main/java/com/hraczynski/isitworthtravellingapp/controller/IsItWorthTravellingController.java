@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "api", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000","https://isitworthtravelling.herokuapp.com/"})
 public class IsItWorthTravellingController {
     private final IsItWorthTravellingService isItWorthTravellingService;
 
