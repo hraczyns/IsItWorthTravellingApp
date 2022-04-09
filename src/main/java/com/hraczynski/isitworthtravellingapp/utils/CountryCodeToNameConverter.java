@@ -3,10 +3,8 @@ package com.hraczynski.isitworthtravellingapp.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -16,10 +14,10 @@ public class CountryCodeToNameConverter {
     @SuppressWarnings("unchecked")
     public static String getCountryByCode(String code) {
         log.info("Searching country by code {}", code);
-        File fileFromResource = getFileFromResource();
+        InputStream inputStreamFromResource = getInputStreamFromResource();
         List<Map<String, Object>> jsonMap = null;
         try {
-            jsonMap = new ObjectMapper().readValue(fileFromResource, List.class);
+            jsonMap = new ObjectMapper().readValue(inputStreamFromResource, List.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -36,19 +34,13 @@ public class CountryCodeToNameConverter {
         return null;
     }
 
-    private static File getFileFromResource() {
-
+    private static InputStream getInputStreamFromResource() {
         ClassLoader classLoader = CountryCodeToNameConverter.class.getClassLoader();
-        URL resource = classLoader.getResource("json/countries.json");
+        InputStream resource = classLoader.getResourceAsStream("json/countries.json");
         if (resource == null) {
             throw new IllegalArgumentException("File not found! Countries.json");
         } else {
-            try {
-                return new File(resource.toURI());
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-                return null;
-            }
+            return resource;
         }
     }
 }
