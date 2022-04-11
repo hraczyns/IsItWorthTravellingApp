@@ -6,7 +6,7 @@ import com.hraczynski.isitworthtravellingapp.client.simplifiedresponseobject.Sim
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -15,7 +15,7 @@ public class Information {
     private String placeName;
     private SimpleWebResult simpleWebResult;
     private List<SimpleWeatherDailyItem> SimpleWeatherDailyItems;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
-    private LocalDateTime timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate timestamp;
 }
 

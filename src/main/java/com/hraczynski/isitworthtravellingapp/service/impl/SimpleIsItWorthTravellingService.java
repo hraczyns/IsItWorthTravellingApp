@@ -7,7 +7,7 @@ import com.hraczynski.isitworthtravellingapp.utils.CountryCodeToNameConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -29,7 +29,7 @@ public class SimpleIsItWorthTravellingService implements IsItWorthTravellingServ
                 .setPlaceName(simpleGeocodeResult.getCity())
                 .setSimpleWebResult(simpleWebResult)
                 .setSimpleWeatherDailyItems(weatherInfo)
-                .setTimestamp(LocalDateTime.now());
+                .setTimestamp(LocalDate.now());
     }
 
     @Override
